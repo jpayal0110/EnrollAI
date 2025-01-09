@@ -1,20 +1,15 @@
-# About 🚀
+## 🌟 EnrollAI: AI-Powered Course Registration Platform
 
-This Repo is regarding Assignment-8
-
-## Project Title
-### EnrollAI
-
-## Project Description
+### What is EnrollAI ?
 ```
-Our AI-powered course registration platform simplifies the academic planning process by helping students
+This is AI-powered course registration platform simplifies the academic planning process by helping students
 select courses that align with their academic goals and career aspirations. Using smart algorithms, the
 platform suggests personalized course pathways based on department guidelines, prerequisites, and individual
 professional objectives, ensuring an efficient and seamless registration experience. With intuitive semester
 planning, real-time prerequisite validation, students can confidently chart their path to success while
 staying on track for graduation.
 ```
-# Domain Model for EnrollAI
+### Domain Model for EnrollAI
 
 ```mermaid
 ---
