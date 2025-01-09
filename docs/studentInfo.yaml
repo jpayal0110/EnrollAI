@@ -1,0 +1,299 @@
+openapi: 3.0.0
+info:
+  title: EnrollAI Student API
+  description: APIs for student operations, including profile management, course enrollment, and course history.
+  version: 1.0.0
+servers:
+  - url: http://localhost:9000
+    description: Local development environment
+
+paths:
+  /student/{studentId}:
+    get:
+      summary: Get Student Profile
+      description: Retrieve a student's profile, enrolled courses, and department.
+      operationId: getStudentProfile
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Student profile retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentInfoResponse'
+        '404':
+          description: Student not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 404
+                message: "Student not found."
+
+  /student/{studentId}/enroll:
+    post:
+      summary: Enroll in a Course
+      description: Enroll a student in a specific course offering for the current term.
+      operationId: enrollCourse
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseOfferId:
+                  type: string
+                  format: uuid
+                  description: Unique ID of the course offering.
+                  example: "987e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '201':
+          description: Student enrolled in the course successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Student enrolled successfully."
+                  enrollmentStatus:
+                    $ref: '#/components/schemas/EnrollmentStatus'
+        '400':
+          description: Enrollment failed due to validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 400
+                message: "Enrollment failed due to validation error."
+        '404':
+          description: Course offering or student not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 404
+                message: "Course offering or student not found."
+
+  /student/{studentId}/courses/history:
+    get:
+      summary: Get Course History
+      description: Retrieve a list of all past and current courses in which the student has been enrolled.
+      operationId: getCourseHistory
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Successfully retrieved course history.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseEnrollment'
+        '404':
+          description: Student not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 404
+                message: "Student not found."
+
+  /student/{studentId}/profile:
+    put:
+      summary: Update Student Profile
+      description: Update profile information for a student, such as name and email.
+      operationId: updateStudentProfile
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Updated name of the student.
+                  example: "John Doe"
+                email:
+                  type: string
+                  format: email
+                  description: Updated email of the student.
+                  example: "john.doe@university.edu"
+      responses:
+        '200':
+          description: Student profile updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Profile updated successfully."
+        '400':
+          description: Update failed due to validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 400
+                message: "Update failed due to validation error."
+        '404':
+          description: Student not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 404
+                message: "Student not found."
+
+components:
+  schemas:
+    StudentInfoResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@university.edu"
+        role:
+          type: string
+          example: "Student"
+        enrolledCourses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CourseEnrollment'
+        department:
+          $ref: '#/components/schemas/Department'
+
+    Course:
+      type: object
+      properties:
+        courseCode:
+          type: string
+          example: "CS101"
+        name:
+          type: string
+          example: "Introduction to Computer Science"
+        prerequisites:
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+
+    CourseOffer:
+      type: object
+      properties:
+        course:
+          $ref: '#/components/schemas/Course'
+        term:
+          $ref: '#/components/schemas/Term'
+        instructor:
+          type: string
+          example: "Dr. Alice Smith"
+        maxSeats:
+          type: integer
+          example: 30
+        currentSeats:
+          type: integer
+          example: 25
+
+    CourseEnrollment:
+      type: object
+      properties:
+        courseOffer:
+          $ref: '#/components/schemas/CourseOffer'
+        enrollmentStatus:
+          type: string
+          enum: ["Enrolled", "Completed", "In Progress"]
+          example: "Enrolled"
+
+    EnrollmentStatus:
+      type: string
+      enum: ["Enrolled", "Completed", "In Progress"]
+      example: "Enrolled"
+
+    Term:
+      type: object
+      properties:
+        year:
+          type: integer
+          example: 2024
+        semester:
+          type: string
+          enum: ["SPRING", "SUMMER", "FALL"]
+          example: "FALL"
+
+    Department:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Computer Science"
+        offeredCourses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+        facultyMembers:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "Dr. Alice Smith"
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: "Student not found"
