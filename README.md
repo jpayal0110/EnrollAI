@@ -14,20 +14,6 @@ professional objectives, ensuring an efficient and seamless registration experie
 planning, real-time prerequisite validation, students can confidently chart their path to success while
 staying on track for graduation.
 ```
-### Team Member Details
-
-Name: Rutwik Ganagi  
-Email Id: ganagi.r@northeastern.edu
-
-Name: Trivikram Bhavesh Budhabhatti    
-Email Id: budhabhatti.t@northeastern.edu
-
-Name: Sarthak Deshmukh  
-Email Id: deshmukh.sar@northeastern.edu
-
-Name: Payal Jadhav  
-Email Id: jadhav.pay@northeastern.edu
-
 # Domain Model for EnrollAI
 
 ```mermaid
