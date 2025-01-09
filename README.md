@@ -9,6 +9,13 @@ professional objectives, ensuring an efficient and seamless registration experie
 planning, real-time prerequisite validation, students can confidently chart their path to success while
 staying on track for graduation.
 ```
+
+### 🚀 Key Features
+- 💬 **ChatBOT**: Provides smart course recommendations based on students' past course selections.  
+- 🌐 **Internationalization in UI** & 🌟 **PWA Support**: Ensures a seamless and localized experience for users with Progressive Web App capabilities.  
+- 🐡 **[Fugu Capabilities](https://developer.chrome.com/docs/capabilities/fugu-showcase)**:  
+  - 🎥 Live webcam for updating profile pictures.  
+  - 🔢 Badging support for the app icon when installed as a standalone application.  
 ### Domain Model for EnrollAI
 
 ```mermaid
